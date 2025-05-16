@@ -6,7 +6,7 @@ namespace Shizima.CoreLib
     {
         public static RecognitionResult? RecognizeAudio(
             List<Fingerprint> queryFingerprints,
-            Dictionary<string, List<Fingerprint>> database)
+            Dictionary<long, List<Fingerprint>> database)
         {
             return RecognizeAudioList(queryFingerprints, database)
                 .FirstOrDefault();
@@ -14,7 +14,7 @@ namespace Shizima.CoreLib
 
         public static List<RecognitionResult?> RecognizeAudioList(
             List<Fingerprint> queryFingerprints,
-            Dictionary<string, List<Fingerprint>> database)
+            Dictionary<long, List<Fingerprint>> database)
         {
             if (queryFingerprints == null || queryFingerprints.Count == 0 || database == null || database.Count == 0)
                 return null;
