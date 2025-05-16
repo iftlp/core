@@ -50,7 +50,7 @@ namespace Shizima.CoreLib
         /// <summary>
         /// Analyzes matches to determine the best result
         /// </summary>
-        public static RecognitionResult? AnalyzeMatches(List<Match> matches, double minMatchesForRecognition, string trackId = "Unknown")
+        public static RecognitionResult? AnalyzeMatches(List<Match> matches, double minMatchesForRecognition, long trackId = -1)
         {
             if (matches == null || matches.Count <= minMatchesForRecognition)
                 return null;

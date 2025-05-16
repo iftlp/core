@@ -8,7 +8,7 @@
         /// <summary>
         /// The id of the music
         /// </summary>
-        public string TrackId { get; set; }
+        public long TrackId { get; set; }
 
         /// <summary>
         /// The confidence of this recognition
