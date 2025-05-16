@@ -17,9 +17,10 @@ build:
   image: mcr.microsoft.com/dotnet/sdk:8.0
   stage: build
   script:
+    - VERSION="1.0.$CI_PIPELINE_ID"
     - dotnet restore $PROJECT_PATH
     - dotnet build $PROJECT_PATH --no-restore --configuration Release
-    - dotnet pack $PROJECT_PATH --configuration Release --output ./packages
+    - dotnet pack $PROJECT_PATH --configuration Release --output ./packages /p:PackageVersion=$VERSION
   artifacts:
     paths:
       - ./packages/*.nupkg
