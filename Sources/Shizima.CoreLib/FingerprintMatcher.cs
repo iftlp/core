@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Shizima.CoreLib.Entities;
+﻿using Shizima.CoreLib.Entities;
 
 namespace Shizima.CoreLib
 {
@@ -62,7 +61,7 @@ namespace Shizima.CoreLib
             foreach (var match in matches)
             {
                 int offset = match.ReferenceTimeOffset - match.QueryTimeOffset;
-                
+
                 if (!offsetHistogram.ContainsKey(offset))
                 {
                     offsetHistogram[offset] = 0;
@@ -72,12 +71,12 @@ namespace Shizima.CoreLib
 
             // Group similar offsets into buckets
             var bucketedHistogram = new Dictionary<int, int>();
-            
+
             foreach (var entry in offsetHistogram)
             {
                 int offset = entry.Key;
                 int count = entry.Value;
-                
+
                 // Find or create a bucket
                 bool addedToBucket = false;
                 foreach (var bucket in bucketedHistogram.Keys.ToList())
@@ -89,7 +88,7 @@ namespace Shizima.CoreLib
                         break;
                     }
                 }
-                
+
                 if (!addedToBucket)
                 {
                     bucketedHistogram[offset] = count;
@@ -99,7 +98,7 @@ namespace Shizima.CoreLib
             // Find the best bucket
             var bestOffset = 0;
             var bestCount = 0;
-            
+
             foreach (var bucket in bucketedHistogram)
             {
                 if (bucket.Value > bestCount)
@@ -111,15 +110,20 @@ namespace Shizima.CoreLib
 
             if (bestCount < minMatchesForRecognition)
                 return null;
-            
+
             // Estimate time offset in milliseconds
             int timeOffsetMs = bestOffset * (Constants.ChunkSize - Constants.ChunkOverlap) * 1000 / Constants.SampleRate;
             timeOffsetMs = Math.Abs(timeOffsetMs);
-            
+
+            double matchRatio = bestCount / Math.Max(1.0, minMatchesForRecognition);
+            double concentrationFactor = (double)bestCount / Math.Max(1, matches.Count);
+
+            double confidence = 1.0 / (1.0 + Math.Exp(-5 * (matchRatio * concentrationFactor - 1)));
+
             return new RecognitionResult
             {
                 TrackId = trackId,
-                Confidence = 0,
+                Confidence = confidence,
                 TimeOffset = timeOffsetMs,
                 MatchCount = bestCount,
             };

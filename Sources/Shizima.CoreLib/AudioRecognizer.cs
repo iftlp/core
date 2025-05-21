@@ -23,22 +23,16 @@ namespace Shizima.CoreLib
                 .Select(entry =>
                 {
                     List<Match> matches = FingerprintMatcher.FindMatches(queryFingerprints, entry.Value);
-                    return matches.Count > 0 ? FingerprintMatcher.AnalyzeMatches(matches, 0.5 * queryFingerprints.Count ,entry.Key) : null;
+                    return matches.Count > 0 ? FingerprintMatcher.AnalyzeMatches(matches, 0.5 * queryFingerprints.Count, entry.Key) : null;
                 })
                 .Where(result => result != null && result.MatchCount > 0)
                 .ToList();
 
-            
-            int maxMatchCount = recognitionResultList.Max(r => r.MatchCount);
-            
-            foreach (var result in recognitionResultList)
-            {
-                result.Confidence = (double)result.MatchCount / maxMatchCount;
-            }
-            
             return recognitionResultList
                 .Where(result => result != null && result.Confidence >= Constants.ScoreThreshold)
-                .OrderByDescending(result => result.MatchCount)
+                .OrderByDescending(result => result.Confidence)
+                .ThenByDescending(result => result.MatchCount)
+                .ThenBy(result => result.TimeOffset)
                 .ToList();
         }
     }

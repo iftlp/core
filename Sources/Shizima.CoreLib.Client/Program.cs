@@ -9,7 +9,7 @@ namespace Shizima.CoreLib.Client
     {
         static void Main(string[] args)
         {
-            string audioFilePath = Path.GetFullPath("../../../data/sample-speed.wav");
+            string audioFilePath = Path.GetFullPath("../../../data/sample3-crop.wav");
 
             if (!File.Exists(audioFilePath))
             {
@@ -65,31 +65,21 @@ namespace Shizima.CoreLib.Client
             }
         }
 
-        private static Dictionary<string, List<Fingerprint>> CreateMockDatabase()
+        private static Dictionary<long, List<Fingerprint>> CreateMockDatabase()
         {
-            var database = new Dictionary<string, List<Fingerprint>>();
-
-            var track1 = new List<Fingerprint>();
-            for (int i = 0; i < 100; i++)
-            {
-                track1.Add(new Fingerprint
-                {
-                    Hash = (uint)(1000 + i),
-                    TimeOffset = i * 5
-                });
-            }
-            database["Track1 - Artiste1"] = track1;
-
-            string track2FilePath = Path.GetFullPath("../../../data/sample.wav");
-            if (File.Exists(track2FilePath))
+            
+            var database = new Dictionary<long, List<Fingerprint>>();
+            
+            string track1FilePath = Path.GetFullPath("../../../data/sample1.wav");
+            if (File.Exists(track1FilePath))
             {
                 try
                 {
-                    byte[] track2AudioData = File.ReadAllBytes(track2FilePath);
-                    if (track2AudioData.Length > 0)
+                    byte[] track1AudioData = File.ReadAllBytes(track1FilePath);
+                    if (track1AudioData.Length > 0)
                     {
-                        var track2 = FingerprintGenerator.AnalyzeAudio(track2AudioData);
-                        database["Sample - Artiste2"] = track2;
+                        var track2 = FingerprintGenerator.AnalyzeAudio(track1AudioData);
+                        database[1] = track2;
                     }
                 }
                 catch (Exception ex)
@@ -98,45 +88,34 @@ namespace Shizima.CoreLib.Client
                 }
             }
 
-            var track3 = new List<Fingerprint>();
-            for (int i = 0; i < 100; i++)
-            {
-                track3.Add(new Fingerprint
-                {
-                    Hash = (uint)(6000 + i),
-                    TimeOffset = i * 5
-                });
-            }
-            database["Track3 - Artiste3"] = track3;
-
-            string track4FilePath = Path.GetFullPath("../../../data/sample-speed.wav");
-            if (File.Exists(track4FilePath))
+            string track2FilePath = Path.GetFullPath("../../../data/sample2.wav");
+            if (File.Exists(track2FilePath))
             {
                 try
                 {
-                    byte[] track4AudioData = File.ReadAllBytes(track4FilePath);
-                    if (track4FilePath.Length > 0)
+                    byte[] track2AudioData = File.ReadAllBytes(track2FilePath);
+                    if (track2FilePath.Length > 0)
                     {
-                        var track4 = FingerprintGenerator.AnalyzeAudio(track4AudioData);
-                        database["Sample speed - Artiste4"] = track4;
+                        var track2 = FingerprintGenerator.AnalyzeAudio(track2AudioData);
+                        database[2] = track2;
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Erreur lors du chargement de Track4: {ex.Message}");
+                    Console.WriteLine($"Erreur lors du chargement de Track6: {ex.Message}");
                 }
             }
 
-            string track5FilePath = Path.GetFullPath("../../../data/sample-crop.wav");
-            if (File.Exists(track5FilePath))
+            string track3FilePath = Path.GetFullPath("../../../data/sample3.wav");
+            if (File.Exists(track3FilePath))
             {
                 try
                 {
-                    byte[] track5AudioData = File.ReadAllBytes(track5FilePath);
-                    if (track5FilePath.Length > 0)
+                    byte[] track3AudioData = File.ReadAllBytes(track3FilePath);
+                    if (track3FilePath.Length > 0)
                     {
-                        var track5 = FingerprintGenerator.AnalyzeAudio(track5AudioData);
-                        database["Sample crop - Artiste5"] = track5;
+                        var track3 = FingerprintGenerator.AnalyzeAudio(track3AudioData);
+                        database[3] = track3;
                     }
                 }
                 catch (Exception ex)
@@ -145,7 +124,44 @@ namespace Shizima.CoreLib.Client
                 }
             }
 
-            string track6FilePath = Path.GetFullPath("../../../data/sample2.wav");
+            string track4FilePath = Path.GetFullPath("../../../data/sample4.wav");
+            if (File.Exists(track4FilePath))
+            {
+                try
+                {
+                    byte[] track4AudioData = File.ReadAllBytes(track4FilePath);
+                    if (track4FilePath.Length > 0)
+                    {
+                        var track4 = FingerprintGenerator.AnalyzeAudio(track4AudioData);
+                        database[4] = track4;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Erreur lors du chargement de Track5: {ex.Message}");
+                }
+            }
+
+            string track5FilePath = Path.GetFullPath("../../../data/sample5.wav");
+            if (File.Exists(track5FilePath))
+            {
+                try
+                {
+                    byte[] track5AudioData = File.ReadAllBytes(track5FilePath);
+                    if (track5FilePath.Length > 0)
+                    {
+                        var track5 = FingerprintGenerator.AnalyzeAudio(track5AudioData);
+                        database[5] = track5;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Erreur lors du chargement de Track4: {ex.Message}");
+                }
+            }
+            
+            
+            string track6FilePath = Path.GetFullPath("../../../data/sample6.wav");
             if (File.Exists(track6FilePath))
             {
                 try
@@ -154,25 +170,7 @@ namespace Shizima.CoreLib.Client
                     if (track6FilePath.Length > 0)
                     {
                         var track6 = FingerprintGenerator.AnalyzeAudio(track6AudioData);
-                        database["Sample 2 - Artiste6"] = track6;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Erreur lors du chargement de Track6: {ex.Message}");
-                }
-            }
-            
-            string track7FilePath = Path.GetFullPath("../../../data/sample-crop-end.wav");
-            if (File.Exists(track7FilePath))
-            {
-                try
-                {
-                    byte[] track7AudioData = File.ReadAllBytes(track7FilePath);
-                    if (track7FilePath.Length > 0)
-                    {
-                        var track7 = FingerprintGenerator.AnalyzeAudio(track7AudioData);
-                        database["Sample crop end - Artiste7"] = track7;
+                        database[6] = track6;
                     }
                 }
                 catch (Exception ex)
